@@ -1,0 +1,52 @@
+datasource db {
+  provider = "sqlite"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String        @id @default(cuid())
+  name      String
+  email     String        @unique
+  password  String
+  role      Role
+  jobs      Job[]         @relation("EmployerJobs")
+  applications Application[]
+}
+
+model Job {
+  id          String        @id @default(cuid())
+  title       String
+  description String
+  location    String
+  employer    User          @relation("EmployerJobs", fields: [employerId], references: [id])
+  employerId  String
+  applications Application[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+model Application {
+  id       String   @id @default(cuid())
+  job      Job      @relation(fields: [jobId], references: [id])
+  jobId    String
+  applicant User    @relation(fields: [userId], references: [id])
+  userId   String
+  status   ApplicationStatus @default(PENDING)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+enum Role {
+  JOB_SEEKER
+  EMPLOYER
+}
+
+enum ApplicationStatus {
+  PENDING
+  REVIEWED
+  ACCEPTED
+  REJECTED
+}

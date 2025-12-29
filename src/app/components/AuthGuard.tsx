@@ -1,27 +1,19 @@
-"use client";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route"; // shared NextAuth config
 
-import { useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
+export default async function AuthGuard({ children }: { children: React.ReactNode }) {
+  const session = await getServerSession(authOptions);
 
-export default function AuthGuard({ children }: { children: React.ReactNode }) {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (status === "authenticated") {
-      // Redirect signed-in users away from /auth
-      router.push("/"); // landing page
+  // If logged in, redirect by role immediately
+  if (session) {
+    if (session.user.role === "EMPLOYER") {
+      redirect("/jobs/post");
+    } else {
+      redirect("/jobs/");
     }
-  }, [status, router]);
-
-  if (status === "loading") {
-    return <p>Loading...</p>; // optional loader
   }
 
-  if (status === "authenticated") {
-    return null; // already redirected
-  }
-
+  // Not logged in → render the auth form
   return <>{children}</>;
 }

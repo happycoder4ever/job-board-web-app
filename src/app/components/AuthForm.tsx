@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { signIn, getSession } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
 export default function AuthForm() {
@@ -32,10 +32,7 @@ export default function AuthForm() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const redirectByRole = async () => {
-    // Get session to access user role
-    const session = await getSession();
-    const role = session?.user?.role || formData.role; // fallback to formData role for signup
+  const redirectByRole = (role: string) => {
     if (role === "EMPLOYER") {
       router.push("/jobs/post");
     } else {
@@ -90,7 +87,8 @@ export default function AuthForm() {
               : signInRes.error
           );
         } else {
-          await redirectByRole(); // redirect according to role
+          // ✅ Redirect immediately based on signup role
+          redirectByRole(payload.role);
         }
       } catch {
         setErrorMsg("Signup failed. Please try again.");
@@ -113,7 +111,8 @@ export default function AuthForm() {
               : res.error
           );
         } else {
-          await redirectByRole(); // redirect according to role
+          // ✅ Let server-side AuthGuard handle role-based redirect
+          router.push("/auth");
         }
       } catch {
         setErrorMsg("Login failed. Please try again.");
@@ -125,7 +124,7 @@ export default function AuthForm() {
 
   return (
     <div className="w-full max-w-md lg:max-w-2xl mx-auto mt-10 select-none">
-      {/* Text Logo */}
+      {/* Logo */}
       <div className="text-center mb-6">
         <h1 className="text-4xl font-bold text-blue-600">Job Board</h1>
         <p className="text-gray-500 text-lg">Your Job Hunting Site</p>

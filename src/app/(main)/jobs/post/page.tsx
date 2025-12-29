@@ -1,17 +1,20 @@
 import { requireRole } from "@/lib/require-role";
+import { JobForm } from "@/app/components/JobForm";
 
 export default async function PostJobPage() {
-  const session = await requireRole("EMPLOYER");
+  await requireRole("EMPLOYER");
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">
-        Post a New Job, {session.user.name}
-      </h1>
-      <p className="mt-2 text-gray-600">
-        Fill in the details below to post a new job listing.
+    <div className="flex flex-col items-center px-6 pt-10 pb-16">
+      <h1 className="text-3xl font-bold text-center">Post a New Job</h1>
+
+      <p className="mt-2 text-center text-gray-600">
+        Fill in the details below to post a new job.
       </p>
-      {/* Placeholder for job form */}
+
+      <div className="w-full">
+        <JobForm />
+      </div>
     </div>
   );
 }

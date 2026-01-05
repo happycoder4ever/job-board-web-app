@@ -1,12 +1,28 @@
 "use client";
 
 import { createJob } from "@/lib/actions/create-job";
+import { updateJob } from "@/lib/actions/update-job";
 
-export function JobForm() {
+type Job = {
+  id: string;
+  title: string;
+  description: string;
+  location: string;
+};
+
+type Props = {
+  job?: Job;
+};
+
+export function JobForm({ job }: Props) {
+  const action = job
+    ? updateJob.bind(null, job.id)
+    : createJob;
+
   return (
     <form
-      action={createJob}
-      className="mx-auto mt-8 max-w-lg space-y-5 rounded-xl border bg-white p-6 shadow-sm"
+      action={action}
+      className="mx-auto mt-8 w-full max-w-3xl space-y-5 rounded-xl border bg-white p-6 shadow-sm"
     >
       <div>
         <label className="block text-sm font-medium text-gray-700">
@@ -14,7 +30,7 @@ export function JobForm() {
         </label>
         <input
           name="title"
-          placeholder="Senior Frontend Developer"
+          defaultValue={job?.title}
           className="mt-1 w-full rounded-md border px-3 py-2 text-sm focus:border-black focus:outline-none"
           required
         />
@@ -26,7 +42,7 @@ export function JobForm() {
         </label>
         <textarea
           name="description"
-          placeholder="Describe the role, responsibilities, and requirements"
+          defaultValue={job?.description}
           rows={5}
           className="mt-1 w-full rounded-md border px-3 py-2 text-sm focus:border-black focus:outline-none"
           required
@@ -39,7 +55,7 @@ export function JobForm() {
         </label>
         <input
           name="location"
-          placeholder="Remote / Berlin / Warsaw"
+          defaultValue={job?.location}
           className="mt-1 w-full rounded-md border px-3 py-2 text-sm focus:border-black focus:outline-none"
           required
         />
@@ -49,7 +65,7 @@ export function JobForm() {
         type="submit"
         className="w-full rounded-md bg-black py-2 text-sm font-medium text-white transition hover:bg-gray-800"
       >
-        Post job
+        {job ? "Update job" : "Post job"}
       </button>
     </form>
   );

@@ -1,5 +1,5 @@
-import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/require-role";
+import { prisma } from "@/lib/prisma";
 import { JobForm } from "@/app/components/JobForm";
 import { redirect, notFound } from "next/navigation";
 
@@ -8,38 +8,47 @@ type Props = {
 };
 
 export default async function EditJobPage({ params }: Props) {
-  await requireRole("EMPLOYER");
-  const resolvedParams = await params;  // <-- unwrap the promise
-  const id = resolvedParams.id;
+  const { id } = await params;
 
-  if (!id) {
-    notFound();
-  }
-  
+  const session = await requireRole("EMPLOYER"); // get current user
+
+  if (!id) notFound();
+
+  // fetch the job and its employer id
   const job = await prisma.job.findUnique({
     where: { id },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      location: true,
+      employerId: true,
+    },
   });
 
-  if (!job) {
-    notFound();
+  if (!job) notFound();
+
+  // Only allow the creator to access
+  if (job.employerId !== session.user.id) {
+    redirect("/");
   }
 
   return (
     <div className="flex flex-col items-center px-6 pt-10 pb-16">
       <h1 className="text-3xl font-bold text-center">Edit Job</h1>
-
       <p className="mt-2 text-center text-gray-600">
         Update your job listing details.
       </p>
-
-      <JobForm
-        job={{
-          id: job.id,
-          title: job.title,
-          description: job.description,
-          location: job.location,
-        }}
-      />
+      <div className="w-full max-w-3xl">
+        <JobForm
+          job={{
+            id: job.id,
+            title: job.title,
+            description: job.description,
+            location: job.location,
+          }}
+        />
+      </div>
     </div>
   );
 }

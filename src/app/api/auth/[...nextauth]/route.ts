@@ -38,11 +38,15 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     jwt({ token, user }: { token: JWT; user?: User }) {
-      if (user) token.role = user.role;
+      if (user) {
+        token.role = user.role;
+        token.id = user.id;
+      }
       return token;
     },
     session({ session, token }: { session: Session; token: JWT }) {
       session.user.role = token.role;
+      session.user.id = token.id;
       return session;
     },
   },

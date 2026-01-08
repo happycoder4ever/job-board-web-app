@@ -1,22 +1,42 @@
-import { requireRole } from "@/lib/require-role";
+// app/(main)/jobs/[id]/apply/page.tsx
+import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
+import ApplyForm from "@/app/components/ApplyForm";
 
-interface ApplyPageProps {
-  params: { id: string };
-}
+type Props = {
+  params: Promise<{ id: string }>;
+};
 
-export default async function ApplyPage({ params }: ApplyPageProps) {
-  const session = await requireRole("JOB_SEEKER");
+export default async function ApplyPage({ params }: Props) {
+  // Unwrap async params
+  const resolvedParams = await params;
+  const jobId = resolvedParams.id;
 
-  const jobId = params.id;
+  // Get session
+  const session = await getServerSession(authOptions);
 
-  // TODO: fetch job details if needed
-  // const job = await prisma.job.findUnique({ where: { id: jobId } });
+  // Server-side protection
+  if (!session || session.user.role !== "JOB_SEEKER") {
+    redirect("/auth");
+  }
+
+  // Fetch job
+  const job = await prisma.job.findUnique({
+    where: { id: jobId },
+    include: { employer: { select: { name: true } } },
+  });
+
+  if (!job) redirect("/jobs");
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold">Apply to Job {jobId}</h1>
-      <p>Welcome, {session.user.name}. Fill the application form below.</p>
-      {/* Application form goes here */}
+    <div className="flex flex-col items-center px-6 pt-10 pb-16">
+      <h1 className="text-3xl font-bold mb-4">{job.title}</h1>
+      <p className="text-gray-600 mb-6">{job.description}</p>
+
+      {/* Render client-side form */}
+      <ApplyForm jobId={job.id} />
     </div>
   );
 }

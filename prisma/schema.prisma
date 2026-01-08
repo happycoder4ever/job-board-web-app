@@ -30,14 +30,15 @@ model Job {
 }
 
 model Application {
-  id       String   @id @default(cuid())
-  job      Job      @relation(fields: [jobId], references: [id])
-  jobId    String
-  applicant User    @relation(fields: [userId], references: [id])
-  userId   String
-  status   ApplicationStatus @default(PENDING)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id        String            @id @default(cuid())
+  job       Job               @relation(fields: [jobId], references: [id])
+  jobId     String
+  applicant User              @relation(fields: [userId], references: [id])
+  userId    String
+  bidText   String            // <-- new required field
+  status    ApplicationStatus @default(PENDING)
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
 }
 
 enum Role {

@@ -5,7 +5,7 @@
 [![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4-blue?logo=tailwind-css)](https://tailwindcss.com/)
 [![Prisma](https://img.shields.io/badge/Prisma-7-blue?logo=prisma)](https://www.prisma.io/)
 [![NextAuth](https://img.shields.io/badge/NextAuth.js-4-purple?logo=next-auth)](https://next-auth.js.org/)
-[![Build](https://img.shields.io/github/actions/workflow/status/happycoder4ever/job-board-web-app/ci.yml?branch=main)](https://github.com/happycoder4ever/job-board-web-app/actions)
+[![Build](https://img.shields.io/github/actions/workflow/status/happycoder4ever/job-board-web-app/ci-build.yml?branch=main)](https://github.com/happycoder4ever/job-board-web-app/actions)
 
 ---
 

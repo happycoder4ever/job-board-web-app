@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import { deleteJob } from "@/lib/actions/delete-job";
+import clsx from "clsx"; // optional, for easier class merging
 
 type Props = {
   jobId: string;
-  onDeleted?: () => void; // optional callback after deletion
+  onDeleted?: () => void;
+  className?: string; // <- allow custom classes
 };
 
-export function DeleteJobButton({ jobId, onDeleted }: Props) {
+export function DeleteJobButton({ jobId, onDeleted, className }: Props) {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -19,7 +21,7 @@ export function DeleteJobButton({ jobId, onDeleted }: Props) {
       setLoading(true);
       setError(null);
       await deleteJob(jobId);
-      onDeleted?.(); // optional callback
+      onDeleted?.();
     } catch (err: any) {
       setError(err?.message || "Unknown error");
     } finally {
@@ -33,7 +35,10 @@ export function DeleteJobButton({ jobId, onDeleted }: Props) {
       <button
         onClick={handleDelete}
         disabled={loading}
-        className="rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:opacity-50"
+        className={clsx(
+          "rounded-md bg-red-600 px-4 py-2 text-white hover:bg-red-700 disabled:opacity-50",
+          className // <- merge external classes
+        )}
       >
         {loading ? "Deleting..." : "Delete Job"}
       </button>

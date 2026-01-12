@@ -71,21 +71,21 @@ export default async function JobDetailPage({ params }: Props) {
         <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center">
           <a
             href={`/jobs/${job.id}/edit`}
-            className="rounded-md bg-black px-4 py-2 text-white hover:bg-gray-800"
+            className="w-full sm:w-auto rounded-md bg-gray-700 px-4 py-2 text-white hover:bg-gray-600 text-center"
           >
             Edit
           </a>
 
           <a
             href={`/jobs/${job.id}/applicants`}
-            className={`rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-500 ${
+            className={`w-full sm:w-auto rounded-md bg-blue-600 px-4 py-2 text-white hover:bg-blue-500 text-center ${
               applicantsCount === 0 ? "opacity-50 pointer-events-none" : ""
             }`}
           >
             View Applicants
           </a>
 
-          <DeleteJobButton jobId={job.id} />
+          <DeleteJobButton jobId={job.id} className="w-full sm:w-auto" />
         </div>
       )}
 

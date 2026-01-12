@@ -22,9 +22,7 @@ export function JobForm({ job }: Props) {
 
   return (
     <>
-      {error && (
-        <p className="text-red-500 mb-2 text-center">{error}</p>
-      )}
+      {error && <p className="text-red-500 mb-2 text-center">{error}</p>}
 
       <form
         action={async (formData: FormData) => {
@@ -35,7 +33,7 @@ export function JobForm({ job }: Props) {
             setError(err?.message || "Unknown error");
           }
         }}
-        className="mx-auto mt-8 w-full max-w-3xl space-y-5 rounded-xl border bg-white p-6 shadow-sm"
+        className="w-full bg-white p-6 sm:p-8 shadow-md rounded-md space-y-5"
       >
         <div>
           <label className="block text-sm font-medium text-gray-700">
@@ -78,7 +76,7 @@ export function JobForm({ job }: Props) {
           type="submit"
           className="w-full rounded-md bg-black py-2 text-sm font-medium text-white transition hover:bg-gray-800"
         >
-          {job ? "Update job" : "Post job"}
+          {job ? "Update Job" : "Post Job"}
         </button>
       </form>
     </>

@@ -14,7 +14,6 @@ export default async function EditJobPage({ params }: Props) {
 
   if (!id) notFound();
 
-  // fetch the job and its employer id
   const job = await prisma.job.findUnique({
     where: { id },
     select: {
@@ -28,18 +27,16 @@ export default async function EditJobPage({ params }: Props) {
 
   if (!job) notFound();
 
-  // Only allow the creator to access
   if (job.employerId !== session.user.id) {
     redirect("/");
   }
 
   return (
-    <div className="flex flex-col items-center px-6 pt-10 pb-16">
+    <div className="flex flex-col items-center min-h-screen px-4 py-10 sm:py-16">
       <h1 className="text-3xl font-bold text-center">Edit Job</h1>
-      <p className="mt-2 text-center text-gray-600">
-        Update your job listing details.
-      </p>
-      <div className="w-full max-w-3xl">
+      <p className="mt-2 text-center text-gray-600">Update your job details.</p>
+
+      <div className="w-full max-w-[700px] mt-8">
         <JobForm
           job={{
             id: job.id,

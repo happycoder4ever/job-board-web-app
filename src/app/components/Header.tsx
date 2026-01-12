@@ -25,14 +25,22 @@ export default function Header() {
       <nav className="flex items-center gap-4">
         {session ? (
           <>
-            {/* Role-specific links */}
             {role === "JOB_SEEKER" && (
-              <Link
-                href="/applications"
-                className="text-gray-700 hover:text-blue-600 font-medium"
-              >
-                My Applications
-              </Link>
+              <>
+                <Link
+                  href="/jobs"
+                  className="text-gray-700 hover:text-blue-600 font-medium"
+                >
+                  Job Listings
+                </Link>
+
+                <Link
+                  href="/applications"
+                  className="text-gray-700 hover:text-blue-600 font-medium"
+                >
+                  My Applications
+                </Link>
+              </>
             )}
             {role === "EMPLOYER" && (
               <>

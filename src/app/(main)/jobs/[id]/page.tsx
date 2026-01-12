@@ -29,9 +29,20 @@ export default async function JobDetailPage({ params }: Props) {
   const isOwner = session?.user.id === job.employerId;
   const isJobSeeker = session?.user.role === "JOB_SEEKER";
 
+  let alreadyApplied = false;
+
+  if (isJobSeeker && session) {
+    const existing = await prisma.application.findFirst({
+      where: {
+        jobId: job.id,
+        userId: session.user.id,
+      },
+    });
+
+    alreadyApplied = !!existing;
+  }
+
   const applicantsCount = job._count?.applications ?? 0;
-  console.log("Session:", session);
-  console.log("User role:", session?.user.role);
 
   return (
     <div className="flex flex-col items-center px-6 pt-10 pb-16">
@@ -71,13 +82,19 @@ export default async function JobDetailPage({ params }: Props) {
         </div>
       )}
       {isJobSeeker && (
-        <div className="mt-6 w-full max-w-xs">
-          <a
-            href={`/jobs/${job.id}/apply`}
-            className="block text-center rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-500"
-          >
-            Apply
-          </a>
+        <div className="mt-6">
+          {alreadyApplied ? (
+            <p className="text-green-700 font-medium">
+              You have already applied to this job.
+            </p>
+          ) : (
+            <a
+              href={`/jobs/${job.id}/apply`}
+              className="inline-block rounded-md bg-green-600 px-4 py-2 text-white hover:bg-green-500"
+            >
+              Apply
+            </a>
+          )}
         </div>
       )}
     </div>

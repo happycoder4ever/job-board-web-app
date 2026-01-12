@@ -19,7 +19,7 @@ export function JobList({ jobs }: Props) {
   }
 
   return (
-    <div className="mt-6 w-full max-w-4xl space-y-4">
+    <div className="mt-6 w-full grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {jobs.map((job) => (
         <JobListItem
           key={job.id}

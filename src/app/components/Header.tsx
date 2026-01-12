@@ -22,7 +22,7 @@ export default function Header() {
       </h1>
 
       {/* Navigation */}
-      <nav className="flex items-center gap-4">
+      <nav className="flex flex-wrap items-center gap-2 sm:gap-4">
         {session ? (
           <>
             {role === "JOB_SEEKER" && (

@@ -45,12 +45,18 @@ export default async function JobDetailPage({ params }: Props) {
   const applicantsCount = job._count?.applications ?? 0;
 
   return (
-    <div className="flex flex-col items-center px-6 pt-10 pb-16">
+    <div className="flex flex-col px-6 pt-10 pb-16 w-full max-w-3xl mx-auto">
+      {/* Title */}
       <h1 className="text-3xl font-bold text-center">{job.title}</h1>
-      <p className="mt-2 text-center text-gray-600">{job.description}</p>
-      <p className="mt-2 text-center text-gray-500">{job.location}</p>
+
+      {/* Description: left-aligned */}
+      <p className="mt-4 text-gray-600 text-left">{job.description}</p>
+
+      {/* Location: centered */}
+      <p className="mt-2 text-gray-500 text-center">{job.location}</p>
+
       {/* Applications count */}
-      <p className="mt-4 text-center text-gray-500">
+      <p className="mt-4 text-gray-500 text-center">
         {isOwner
           ? `${applicantsCount} ${
               applicantsCount === 1 ? "applicant" : "applicants"
@@ -59,9 +65,10 @@ export default async function JobDetailPage({ params }: Props) {
           ? "No applications yet"
           : `${applicantsCount} talents applied`}
       </p>
+
       {/* Owner-only actions */}
       {isOwner && (
-        <div className="flex gap-4 mt-6">
+        <div className="flex flex-col sm:flex-row gap-4 mt-6 justify-center">
           <a
             href={`/jobs/${job.id}/edit`}
             className="rounded-md bg-black px-4 py-2 text-white hover:bg-gray-800"
@@ -81,8 +88,10 @@ export default async function JobDetailPage({ params }: Props) {
           <DeleteJobButton jobId={job.id} />
         </div>
       )}
+
+      {/* Job-seeker Apply button */}
       {isJobSeeker && (
-        <div className="mt-6">
+        <div className="mt-6 text-center">
           {alreadyApplied ? (
             <p className="text-green-700 font-medium">
               You have already applied to this job.

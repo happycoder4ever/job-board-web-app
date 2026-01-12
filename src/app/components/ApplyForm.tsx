@@ -33,7 +33,7 @@ export default function ApplyForm({ jobId }: { jobId: string }) {
     <>
       <textarea
         placeholder="Write your bid or motivation"
-        className="w-full max-w-2xl border rounded p-2 mb-4"
+        className="w-full sm:w-full max-w-2xl border rounded p-2 mb-4 sm:p-3"
         rows={6}
         value={bidText}
         onChange={(e) => setBidText(e.target.value)}
